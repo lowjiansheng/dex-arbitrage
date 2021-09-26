@@ -25,9 +25,9 @@ contract Arbitrage {
     }
 
     // this will be called to check if is worth attempting arbitrage
-    function shouldArbitrage(address secondToken) public view returns (bool) {
+    function shouldArbitrage() public view returns (bool) {
         uint256 originalAmount = 100000000; // 100 USDC (6 DP)
-        uint256 wethOutAmount = getWETHUSDCBuyPriceQuickSwap(, aoriginalAmount);
+        uint256 wethOutAmount = getWETHUSDCBuyPriceQuickSwap(originalAmount);
         uint256 usdcOutAmount = getWETHUSDCSellPriceSushiSwap(wethOutAmount);
 
         return (originalAmount < usdcOutAmount);
@@ -116,10 +116,11 @@ contract Arbitrage {
         return amountOut[1];
     }
 
-    function getWETHUSDCBuyPriceQuickSwap(
-        address secondToken,
-        uint256 amountInUSDC
-    ) public view returns (uint256) {
+    function getWETHUSDCBuyPriceQuickSwap(uint256 amountInUSDC)
+        public
+        view
+        returns (uint256)
+    {
         address[] memory path = new address[](2);
         path[0] = USDC_CONTRACT_ADDRESS;
         path[1] = quickswapRouter02.WETH();
